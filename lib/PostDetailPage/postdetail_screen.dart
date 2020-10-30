@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobileapp/ListContentsPage/components/body.dart';
+import 'package:mobileapp/PostDetailPage/components/body.dart';
 
 class PostDetailScreen extends StatelessWidget {
   @override

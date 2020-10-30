@@ -296,6 +296,7 @@ class Body extends StatelessWidget {
                                                                     color:
                                                                     Colors.white),
                                                               ),
+                                                              color: Colors.blue,
                                                             ),
                                                           ),
                                                         ),
