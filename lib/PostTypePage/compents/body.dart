@@ -37,7 +37,7 @@ class Body extends StatelessWidget {
                 trailing: Icon(Icons.keyboard_arrow_right),
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return InfoScreen();
+                    return InfoScreen(userLogin: userLogin,);
                   }));
                 },
               ),
