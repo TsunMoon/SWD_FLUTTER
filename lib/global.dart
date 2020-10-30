@@ -1,0 +1,1 @@
+const GET_WRITER_POST = "https://thanhdeptrai.azurewebsites.net/api/posts/WriterPost";
