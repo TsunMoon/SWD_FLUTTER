@@ -1,9 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:mobileapp/Models/writer_post.dart';
 
 class Body extends StatelessWidget {
+
+  WriterPost writerPost;
+
+  Body({Key key, this.writerPost}) : super(key: key);
+
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    TextEditingController titleController = TextEditingController();
+    TextEditingController descriptionController = TextEditingController();
+    TextEditingController documentController = TextEditingController();
+    TextEditingController priceController = TextEditingController();
+
+    titleController.text = writerPost.title != null ? writerPost.title : "Không có tiêu đề";
+    descriptionController.text = writerPost.description != null ? writerPost.description : "Không có mô tả";
+    documentController.text = writerPost.relatedDocument != null ? writerPost.relatedDocument : "Không có tài liệu";
+    priceController.text = writerPost.amount != null ? writerPost.amount.toString()  : "0";
+
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: SingleChildScrollView(
@@ -24,6 +41,11 @@ class Body extends StatelessWidget {
                         borderSide: BorderSide(color: Colors.blue, width: 2.0),
                       ),
                     ),
+                    controller: titleController,
+                    readOnly: true,
+                    style: TextStyle(
+                      color: Colors.green
+                    ),
                   ),
                 ),
                 Text('Description'),
@@ -34,6 +56,11 @@ class Body extends StatelessWidget {
                       border: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.blue, width: 2.0),
                       ),
+                    ),
+                    controller: descriptionController,
+                    readOnly: true,
+                    style: TextStyle(
+                        color: Colors.red
                     ),
                   ),
                 ),
@@ -46,6 +73,8 @@ class Body extends StatelessWidget {
                         borderSide: BorderSide(color: Colors.blue, width: 2.0),
                       ),
                     ),
+                    controller: documentController,
+                    readOnly: true,
                   ),
                 ),
                 Text('Price'),
@@ -56,6 +85,11 @@ class Body extends StatelessWidget {
                       border: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.blue, width: 2.0),
                       ),
+                    ),
+                    controller: priceController,
+                    readOnly: true,
+                    style: TextStyle(
+                        color: Colors.blue
                     ),
                   ),
                 ),
@@ -73,4 +107,6 @@ class Body extends StatelessWidget {
       ),
     );
   }
+
+  
 }
