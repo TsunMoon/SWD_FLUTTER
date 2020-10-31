@@ -13,12 +13,23 @@ class Body extends StatelessWidget {
   final List<int> colorCodes = <int>[600, 500, 100];
 
   UserLogin userLogin;
+  int numberJob;
 
-  Body({Key key, this.userLogin}) : super(key: key);
+  Body({Key key, this.userLogin, this.numberJob}) : super(key: key);
 
   //Hàm fetch api lấy list các bài post
   Future<List<WriterPost>> _fetchPostWriter() async {
-    http.Response response = await http.get(GET_WRITER_POST);
+    http.Response response;
+    if(numberJob == 1){
+       response = await http.get(GET_WRITER_POST);
+    }else
+    if(numberJob == 2){
+       response = await http.get(GET_DESIGN_POST);
+    }else
+      if(numberJob == 3){
+        response = await http.get(GET_TRANSLATE_POST);
+      }
+
     var jsonData = json.decode(utf8.decode(response.bodyBytes));
     List<WriterPost> listWriter = [];
 
@@ -207,7 +218,7 @@ class Body extends StatelessWidget {
                                                         flex: 1,
                                                         child: Container(
                                                           child: Text(
-                                                            '750000',
+                                                            snapshot.data[index].amount.toString(),
                                                             style: TextStyle(
                                                                 color:
                                                                 Colors.blueAccent,
@@ -235,8 +246,12 @@ class Body extends StatelessWidget {
                                                         .data[index].description,
                                                     overflow:
                                                     TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        color: Colors.grey),
+                                                    style: numberJob != 3 ? TextStyle(
+                                                        color: Colors.grey)
+                                                    : TextStyle(
+                                                      color: Colors.redAccent,
+                                                      fontSize: 18,
+                                                    ),
                                                   )
                                                       : Text("Không có mô tả"),
                                                 ),
@@ -287,7 +302,7 @@ class Body extends StatelessWidget {
                                                                     MaterialPageRoute(
                                                                         builder:
                                                                             (context) {
-                                                                          return PostDetailScreen();
+                                                                          return PostDetailScreen(writerPost: snapshot.data[index],);
                                                                         }));
                                                               },
                                                               child: Text(

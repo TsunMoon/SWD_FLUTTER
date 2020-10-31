@@ -68,7 +68,7 @@ class Body extends StatelessWidget {
                       press: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                              return ListContentsScreen(userLogin: userLogin,);
+                              return ListContentsScreen(userLogin: userLogin,numberJob: 1,);
                             }));
                       },
                     ),
@@ -79,7 +79,7 @@ class Body extends StatelessWidget {
                       press: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                              return ;
+                              return ListContentsScreen(userLogin: userLogin,numberJob: 2,);
                             }));
                       },
                     ),
@@ -90,7 +90,7 @@ class Body extends StatelessWidget {
                       press: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                              return ;
+                              return ListContentsScreen(userLogin: userLogin,numberJob: 3,);
                             }));
                       },
                     )
