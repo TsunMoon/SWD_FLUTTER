@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mobileapp/ListContentsPage/listcontents_screen.dart';
 import 'package:mobileapp/LoginPage/components/body.dart';
 import 'package:mobileapp/LoginPage/login_screen.dart';
 import 'package:mobileapp/MainPage/main_screen.dart';
 import 'package:mobileapp/Models/user_login.dart';
+import 'package:mobileapp/PostTypePage/posttype_screen.dart';
 import 'package:mobileapp/components/rounded_button.dart';
 import 'package:mobileapp/constants.dart';
 
@@ -43,7 +45,7 @@ class Body extends StatelessWidget {
             title: 'Trang chủ',
             press: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return MainScreen();
+                return PostTypeScreen(userLogin: userLogin,);
               }));
             },
           ),
@@ -54,28 +56,8 @@ class Body extends StatelessWidget {
             height: 1.0,
           ),
           CustomListTitle(
-            icon: Icons.card_giftcard,
-            title: 'Ví voucher',
-          ),
-          Divider(
-            color: Colors.black,
-            endIndent: 20.0,
-            indent: 20.0,
-            height: 1.0,
-          ),
-          CustomListTitle(
-            icon: Icons.history,
-            title: 'Lịch sử giao dịch',
-          ),
-          Divider(
-            color: Colors.black,
-            endIndent: 20.0,
-            indent: 20.0,
-            height: 1.0,
-          ),
-          CustomListTitle(
-            icon: Icons.menu,
-            title: 'Phương thức thanh toán',
+            icon: Icons.edit,
+            title: 'Profile',
           ),
           Divider(
             color: Colors.black,
@@ -86,6 +68,16 @@ class Body extends StatelessWidget {
           CustomListTitle(
             icon: Icons.settings,
             title: 'Cài đặt',
+          ),
+          Divider(
+            color: Colors.black,
+            endIndent: 20.0,
+            indent: 20.0,
+            height: 1.0,
+          ),
+          CustomListTitle(
+            icon: Icons.info,
+            title: 'About Contrade',
           ),
           Divider(
             color: Colors.black,

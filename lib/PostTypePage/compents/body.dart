@@ -64,7 +64,7 @@ class Body extends StatelessWidget {
                     PostingType(
                       color: Color(0xFFE8E8E8),
                       icon: 'assets/images/thomaylanh.png',
-                      title: 'Content Oursourcing',
+                      title: 'Content Outsourcing',
                       press: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
@@ -75,7 +75,7 @@ class Body extends StatelessWidget {
                     PostingType(
                       color: Color(0xFFE8E8E8),
                       icon: 'assets/images/thodien.png',
-                      title: 'Design Oursourcing',
+                      title: 'Design Outsourcing',
                       press: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
@@ -86,7 +86,7 @@ class Body extends StatelessWidget {
                     PostingType(
                       color: Color(0xFFE8E8E8),
                       icon: 'assets/images/thodien.png',
-                      title: 'Translate Oursourcing',
+                      title: 'Translate Outsourcing',
                       press: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
