@@ -1,11 +1,23 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:mobileapp/ListContentsPage/listcontents_screen.dart';
+import 'package:mobileapp/Models/user_login.dart';
 import 'package:mobileapp/Models/writer_post.dart';
+import 'package:http/http.dart' as http;
+import 'package:mobileapp/global.dart';
+
 
 class Body extends StatelessWidget {
 
   WriterPost writerPost;
+  UserLogin userLogin;
+  int numberJob;
+  bool isRequested;
+  String strButton;
 
-  Body({Key key, this.writerPost}) : super(key: key);
+
+  Body({Key key, this.writerPost, this.userLogin, this.numberJob, this.isRequested, this.strButton}) : super(key: key);
 
 
   @override
@@ -94,13 +106,103 @@ class Body extends StatelessWidget {
                   ),
                 ),
                 Container(
-                    child: FlatButton(
-                      onPressed: () {},
+                    child: strButton.compareTo("Accepted") == 0 ? Container() : FlatButton(
+                      onPressed: ()  async {
+
+                        if(isRequested){
+                          //Bỏ api xóa trong bằng UserHavingPost
+                          http.Response response = await http.post(
+                            Uri.encodeFull(DELETE_REUESTED_POST),
+                            headers: {"Content-type": "application/json"},
+                            body: jsonEncode({
+                              'username': userLogin.username,
+                              'postId': writerPost.id,
+                              'status' : 'requested'
+                            })
+                          );
+
+                          if(response.statusCode == 201){
+                            showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog( title: Text('Hủy thành công', style: TextStyle(color: Colors.cyan, fontSize: 25),),
+                                  content: SingleChildScrollView(
+                                    child: ListBody(
+                                      children: <Widget>[
+
+
+                                      ],
+                                    ),
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: Text('Đồng ý'),
+                                      onPressed: () {
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                          return ListContentsScreen(userLogin: userLogin, numberJob: numberJob,);
+                                        }) );
+                                      },
+                                    ),
+                                  ],
+
+                                )
+                            );
+
+
+                          }
+
+                        }else{
+                          http.Response response = await http.post(
+                              Uri.encodeFull(POST_REQUESTED_POST),
+                              headers: {"Content-type": "application/json"},
+                              body: jsonEncode({
+                                'username' : userLogin.username,
+                                'postId': writerPost.id,
+                                'status': 'requested'
+                              })
+                          );
+
+
+                          if(response.statusCode == 201){
+                            Navigator.push(context, MaterialPageRoute(builder: (context) {
+                              return ListContentsScreen(userLogin: userLogin, numberJob: numberJob,);
+                            }) );
+                          }else{
+
+                            showDialog(
+                               context: context,
+                              builder: (_) => AlertDialog( title: Text('KHÔNG THỂ REQUEST', style: TextStyle(color: Colors.red, fontSize: 25),),
+                                content: SingleChildScrollView(
+                                  child: ListBody(
+                                    children: <Widget>[
+                                      Text('Bạn đang thực hiện một bài POST khác rồi', style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+
+                                    ],
+                                  ),
+                                ),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: Text('Đồng ý'),
+                                    onPressed: () {
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                        return ListContentsScreen(userLogin: userLogin, numberJob: numberJob,);
+                                      }) );
+                                    },
+                                  ),
+                                ],
+
+                              )
+                            );
+                          }
+                        }
+
+
+
+                      },
                       child: Text(
-                        'Request',
+                        strButton,
                         style: TextStyle(color: Colors.white),
                       ),
-                      color: Colors.blue,
+                      color: isRequested ? Colors.red : Colors.blue,
                     ))
               ],
             )),

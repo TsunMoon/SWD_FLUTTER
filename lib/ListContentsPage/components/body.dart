@@ -8,32 +8,127 @@ import 'package:mobileapp/global.dart';
 import 'dart:async';
 import 'dart:convert';
 
-class Body extends StatelessWidget {
+import 'package:mobileapp/list_3_tab.dart';
+
+class Body extends StatefulWidget {
+  UserLogin userLogin;
+  int numberJob;
+  bool isRequested = false;
+  String strButton = "Request";
+
+  Body({Key key, this.userLogin, this.numberJob}) : super(key: key) ;
+  @override
+  _BodyState createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
+
+
   final List<String> entries = <String>['A', 'B', 'C'];
   final List<int> colorCodes = <int>[600, 500, 100];
 
-  UserLogin userLogin;
-  int numberJob;
+  Future<List<WriterPost>> listTotal;
 
-  Body({Key key, this.userLogin, this.numberJob}) : super(key: key);
+
+
+
+
+
 
   //Hàm fetch api lấy list các bài post
   Future<List<WriterPost>> _fetchPostWriter() async {
     http.Response response;
-    if(numberJob == 1){
-       response = await http.get(GET_WRITER_POST);
+    if(widget.numberJob == 1){
+       response = await http.post(
+         Uri.encodeFull(GET_WRITER_POST),
+           headers: {"Content-type": "application/json"},
+           body: jsonEncode(<String, String>{
+             'username' : widget.userLogin.username
+           }
+       ));
     }else
-    if(numberJob == 2){
-       response = await http.get(GET_DESIGN_POST);
+    if(widget.numberJob == 2){
+       response = await http.post(
+           Uri.encodeFull(GET_DESIGN_POST),
+           headers: {"Content-type": "application/json"},
+           body: jsonEncode(<String, String>{
+             'username' : widget.userLogin.username
+           }
+           )
+       );
     }else
-      if(numberJob == 3){
-        response = await http.get(GET_TRANSLATE_POST);
+      if(widget.numberJob == 3){
+        response = await http.post(
+            Uri.encodeFull(GET_TRANSLATE_POST),
+            headers: {"Content-type": "application/json"},
+            body: jsonEncode(<String, String>{
+              'username' : widget.userLogin.username
+            }
+            )
+        );
       }
 
     var jsonData = json.decode(utf8.decode(response.bodyBytes));
     List<WriterPost> listWriter = [];
 
     for (var u in jsonData) {
+      WriterPost wpost = WriterPost(
+        id: u["id"],
+        title: u["title"],
+        description: u["description"],
+        characterLimit: u["characterLimit"],
+        amount: u["amount"],
+        postType: u["postType"],
+        relatedDocument: u["relatedDocument"],
+        isPublic: u["isPublic"],
+        createdDate: u["createdDate"],
+        status: u["status"],
+      );
+      listWriter.add(wpost);
+    }
+    return listWriter;
+  }
+
+  //Hàm lấy tất cả bài requested và accepted của 1 username
+  Future<List<WriterPost>> _getRequetedByUsername(String statusWant) async {
+    http.Response response;
+
+    if(statusWant.compareTo("Requested") == 0 ){
+      response =  await http.post(Uri.encodeFull(GET_REQUESTED_POST),
+          headers: {"Content-type": "application/json"},
+        body: jsonEncode(<String,String>{
+          'username' : widget.userLogin.username
+        })
+      );
+
+    }
+    if(statusWant.compareTo("Accepted") == 0){
+      response =  await http.post(
+          Uri.encodeFull(GET_ACCEPTED_POST),
+          headers: {"Content-type": "application/json"},
+          body: jsonEncode({
+            'username' : widget.userLogin.username
+          })
+      );
+    }
+    if(statusWant==null){
+      //Trường hợp ngoài dự liệu, để code ko phát sinh lỗi
+      response = await http.post(
+          Uri.encodeFull(GET_WRITER_POST),
+          headers: {"Content-type": "application/json"},
+          body: jsonEncode(<String, String>{
+            'username' : widget.userLogin.username
+          }
+          )
+      );
+    }
+
+    var jsonData = json.decode(utf8.decode(response.bodyBytes));
+    print(jsonData);
+    List<WriterPost> listWriter = [];
+
+    for (var u in jsonData) {
+
       WriterPost wpost = WriterPost(
         id: u["id"],
         title: u["title"],
@@ -69,18 +164,18 @@ class Body extends StatelessWidget {
             child: ListTile(
               leading: CircleAvatar(
                 backgroundImage: NetworkImage(
-                  userLogin.photoUrl,
+                  widget.userLogin.photoUrl,
                 ),
               ),
               title: Text(
-                userLogin.displayName,
+                widget.userLogin.displayName,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
               subtitle: Text('Xin chào!'),
               trailing: Icon(Icons.keyboard_arrow_right),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return InfoScreen(userLogin: userLogin,);
+                  return InfoScreen(userLogin: widget.userLogin,);
                 }));
               },
             ),
@@ -104,7 +199,13 @@ class Body extends StatelessWidget {
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 8, right: 8),
                                   child: FlatButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      setState(() {
+                                        listTotal = _fetchPostWriter();
+                                      });
+                                    widget.isRequested = false;
+                                      widget.strButton = "Request";
+                                    },
                                     child: Text('All'),
                                     color: Colors.orange,
                                   ),
@@ -115,7 +216,14 @@ class Body extends StatelessWidget {
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 8, right: 8),
                                   child: FlatButton(
-                                    onPressed: () {},
+                                    onPressed: ()  {
+                                    
+                                      setState(()  {
+                                        listTotal = _getRequetedByUsername("Requested");
+                                      });
+                                      widget.isRequested = true;
+                                      widget.strButton = "Cancel Request";
+                                    },
                                     child: Text('Requested'),
                                     color: Colors.orange,
                                   ),
@@ -126,7 +234,13 @@ class Body extends StatelessWidget {
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 8, right: 8),
                                   child: FlatButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      setState(() {
+                                        listTotal = _getRequetedByUsername("Accepted");
+                                      });
+                                      widget.isRequested = false;
+                                      widget.strButton = "Accepted";
+                                    },
                                     child: Text('Accepted'),
                                     color: Colors.orange,
                                   ),
@@ -138,198 +252,7 @@ class Body extends StatelessWidget {
                       ),
                       Expanded(
                         flex: 9,
-                        child: Container(
-                            child: FutureBuilder(
-                              future: _fetchPostWriter(),
-                              builder: (context, snapshot) {
-                                if (snapshot.data == null) {
-                                  return Container(
-                                    child: Center(
-                                      child: Text("Loading..."),
-                                    ),
-                                  );
-                                } else {
-                                  return ListView.separated(
-                                    itemCount: snapshot.data.length,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      return Container(
-                                          height: 160,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            border: Border.all(
-                                              color: Colors.black,
-                                            ),
-                                            borderRadius: BorderRadius.circular(12),
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 10, right: 10),
-                                            child: Column(
-                                              children: [
-                                                Container(
-                                                  height: 30,
-                                                  child: Row(
-                                                    children: [
-                                                      Expanded(
-                                                        flex: 4,
-                                                        child: Padding(
-                                                          padding:
-                                                          const EdgeInsets.only(
-                                                              right: 40.0),
-                                                          child: Container(
-                                                            child: Row(
-                                                              children: [
-                                                                Expanded(
-                                                                  child: Container(
-                                                                    child: Text(
-                                                                      '#News',
-                                                                      style: TextStyle(
-                                                                          color: Colors
-                                                                              .lightBlueAccent),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                Expanded(
-                                                                  child: Container(
-                                                                    child: Text(
-                                                                      '#News',
-                                                                      style: TextStyle(
-                                                                          color: Colors
-                                                                              .lightBlueAccent),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                Expanded(
-                                                                  child: Container(
-                                                                    child: Text(
-                                                                      '#News',
-                                                                      style: TextStyle(
-                                                                          color: Colors
-                                                                              .lightBlueAccent),
-                                                                    ),
-                                                                  ),
-                                                                )
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: Container(
-                                                          child: Text(
-                                                            snapshot.data[index].amount.toString(),
-                                                            style: TextStyle(
-                                                                color:
-                                                                Colors.blueAccent,
-                                                                fontSize: 18),
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                Container(
-                                                  height: 50,
-                                                  child: Text(
-                                                    snapshot.data[index].title,
-                                                    style: TextStyle(fontSize: 23),
-                                                  ),
-                                                ),
-                                                Container(
-                                                  height: 20,
-                                                  child: snapshot.data[index]
-                                                      .description !=
-                                                      null
-                                                      ? Text(
-                                                    snapshot
-                                                        .data[index].description,
-                                                    overflow:
-                                                    TextOverflow.ellipsis,
-                                                    style: numberJob != 3 ? TextStyle(
-                                                        color: Colors.grey)
-                                                    : TextStyle(
-                                                      color: Colors.redAccent,
-                                                      fontSize: 18,
-                                                    ),
-                                                  )
-                                                      : Text("Không có mô tả"),
-                                                ),
-                                                Container(
-                                                  height: 50,
-                                                  child: Row(
-                                                    children: [
-                                                      Expanded(
-                                                        flex: 2,
-                                                        child: Container(
-                                                          child: snapshot.data[index].createdDate !=
-                                                              null
-                                                              ? Text('Created at ' +
-                                                              snapshot.data[index]
-                                                                  .createdDate
-                                                                  .substring(
-                                                                  11, 13) +
-                                                              ":" +
-                                                              snapshot.data[index]
-                                                                  .createdDate
-                                                                  .substring(
-                                                                  14, 16) +
-                                                              " | " +
-                                                              snapshot.data[index]
-                                                                  .createdDate
-                                                                  .substring(
-                                                                  8, 10) +
-                                                              "/" +
-                                                              snapshot.data[index]
-                                                                  .createdDate
-                                                                  .substring(5, 7) +
-                                                              "/" +
-                                                              snapshot.data[index]
-                                                                  .createdDate
-                                                                  .substring(0, 4))
-                                                              : Text("Created at 21:40 | 27/10/2020"),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        child: Padding(
-                                                          padding:
-                                                          const EdgeInsets.only(
-                                                              left: 20.0, right: 5),
-                                                          child: Container(
-                                                            child: FlatButton(
-                                                              onPressed: () {
-                                                                Navigator.push(context,
-                                                                    MaterialPageRoute(
-                                                                        builder:
-                                                                            (context) {
-                                                                          return PostDetailScreen(writerPost: snapshot.data[index],);
-                                                                        }));
-                                                              },
-                                                              child: Text(
-                                                                'Preview',
-                                                                style: TextStyle(
-                                                                    color:
-                                                                    Colors.white),
-                                                              ),
-                                                              color: Colors.blue,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ));
-                                    },
-                                    separatorBuilder:
-                                        (BuildContext context, int index) =>
-                                    const Divider(),
-                                  );
-                                }
-                              },
-                            )),
+                        child: listTotal == null ?List3Tab(listWriter: _fetchPostWriter(),userLogin: widget.userLogin, numberJob: widget.numberJob,isRequested: widget.isRequested,strButton: widget.strButton, ) :List3Tab(listWriter: listTotal,userLogin: widget.userLogin, numberJob: widget.numberJob,isRequested: widget.isRequested,strButton: widget.strButton, )
                       )
                     ],
                   )),
