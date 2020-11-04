@@ -5,6 +5,7 @@ import 'package:mobileapp/LoginPage/login_screen.dart';
 import 'package:mobileapp/MainPage/main_screen.dart';
 import 'package:mobileapp/Models/user_login.dart';
 import 'package:mobileapp/PostTypePage/posttype_screen.dart';
+import 'package:mobileapp/TransactionHistoryPage/transactionhistory_screen.dart';
 import 'package:mobileapp/components/rounded_button.dart';
 import 'package:mobileapp/constants.dart';
 
@@ -39,6 +40,21 @@ class Body extends StatelessWidget {
             userLogin.displayName,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
+          ),
+          CustomListTitle(
+            icon: Icons.archive,
+            title: 'Transaction History',
+            press: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return TransactionHistoryScreen();
+              }));
+            },
+          ),
+          Divider(
+            color: Colors.black,
+            endIndent: 20.0,
+            indent: 20.0,
+            height: 1.0,
           ),
           CustomListTitle(
             icon: Icons.home,
