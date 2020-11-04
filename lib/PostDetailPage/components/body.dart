@@ -134,7 +134,7 @@ class Body extends StatelessWidget {
                                     ),
                                   ),
                                   actions: <Widget>[
-                                    TextButton(
+                                    FlatButton(
                                       child: Text('Đồng ý'),
                                       onPressed: () {
                                         Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -180,7 +180,7 @@ class Body extends StatelessWidget {
                                   ),
                                 ),
                                 actions: <Widget>[
-                                  TextButton(
+                                  FlatButton(
                                     child: Text('Đồng ý'),
                                     onPressed: () {
                                       Navigator.push(context, MaterialPageRoute(builder: (context) {
