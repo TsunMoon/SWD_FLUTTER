@@ -46,7 +46,7 @@ class Body extends StatelessWidget {
             title: 'Transaction History',
             press: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return TransactionHistoryScreen();
+                return TransactionHistoryScreen(userLogin: userLogin,);
               }));
             },
           ),
