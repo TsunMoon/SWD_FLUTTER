@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:mobileapp/Models/user_login.dart';
 import 'package:mobileapp/Models/writer_post.dart';
 import 'package:mobileapp/PostDetailPage/postdetail_screen.dart';
+import 'package:http/http.dart' as http;
+import 'package:mobileapp/global.dart';
 
 class List3Tab extends StatefulWidget {
   Future<List<WriterPost>> listWriter;
@@ -24,6 +28,41 @@ class List3Tab extends StatefulWidget {
 }
 
 class _List3TabState extends State<List3Tab> {
+
+  // Hàm mô phỏng ấn submit
+  void pressSubmit(int postID){
+    showDialog(
+        context: context,
+        builder: (_) => AlertDialog( title: Text('KHÔNG THỂ REQUEST', style: TextStyle(color: Colors.red, fontSize: 25),),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Bạn đang thực hiện một bài POST khác rồi', style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Đồng ý'),
+              onPressed: () async {
+                http.Response response = await http.post(Uri.encodeFull(PRESS_SUBMIT),
+                    headers: {"Content-type": "application/json"},
+                    body: jsonEncode(<String,String>{
+                      'postId' : postID.toString(),
+                      'giver' : "abv",
+                      'receiver' : widget.userLogin.username ,
+                    })
+                );
+              },
+            ),
+          ],
+
+        )
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -174,9 +213,10 @@ class _List3TabState extends State<List3Tab> {
                                   child: Container(
                                     child: widget.strButton == "Accepted"
                                         ? FlatButton(
-                                            onPressed: (
-                                                //Viết hàm submit ở đây
-                                                ) {},
+                                            onPressed: () {
+                                              print(snapshot.data[index].id);
+                                              pressSubmit(snapshot.data[index].id);
+                                            },
                                       child: Text(
                                         'Submit',
                                         style: TextStyle(
