@@ -69,6 +69,7 @@ class _BodyState extends State<Body> {
       }
 
     var jsonData = json.decode(utf8.decode(response.bodyBytes));
+      print( jsonData);
     List<WriterPost> listWriter = [];
 
     for (var u in jsonData) {
@@ -83,6 +84,9 @@ class _BodyState extends State<Body> {
         isPublic: u["isPublic"],
         createdDate: u["createdDate"],
         status: u["status"],
+        listKeywords: List.from(u["listKeywords"])
+
+        // listKeywords: u["listKeywords"]
       );
       listWriter.add(wpost);
     }
@@ -140,6 +144,7 @@ class _BodyState extends State<Body> {
         isPublic: u["isPublic"],
         createdDate: u["createdDate"],
         status: u["status"],
+          listKeywords: List.from(u["listKeywords"])
       );
       listWriter.add(wpost);
     }
