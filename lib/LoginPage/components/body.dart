@@ -58,19 +58,20 @@ Future<String> postLoginUser() async{
           children: [
             SizedBox(
               height: size.height * 0.03,
+
             ),
             Text(
-              "CONTRADE",
+              'CONTRADE',
               style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 25,
+                  fontSize: 48,
                   color: Colors.black),
             ),
             SizedBox(
               height: size.height * 0.03,
             ),
             Image.asset(
-              "assets/images/login.png",
+              "assets/images/login-anim.gif",
               height: size.height * 0.35,
             ),
             SizedBox(

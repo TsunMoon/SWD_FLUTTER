@@ -53,7 +53,11 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
-
+  fonts:
+    - family: Raleway
+      fonts:
+        - asset: assets/fonts/XanhMono-Regular.ttf
+        - asset: assets/fonts/Roboto-Regular.ttf
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
