@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PostingType extends StatelessWidget {
@@ -22,8 +23,8 @@ class PostingType extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(5),
           child: Container(
-            width: size.width * 0.60,
-            height: size.height * 0.25,
+            width: size.width * 0.30,
+            height: size.height * 0.24,
             color: color,
             child: RaisedButton(
               color: color,
@@ -42,11 +43,12 @@ class PostingType extends StatelessWidget {
                       )),
                   Container(
                     height: size.height * 0.08,
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+                    //padding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                    padding: EdgeInsets.only(top: 10.0),
                     alignment: Alignment.topCenter,
                     child: Text(
                       title,
-                      style: TextStyle(color: Colors.black, fontSize: 15),
+                      style: TextStyle(color: Colors.black, fontSize: 12),
                       textAlign: TextAlign.center,
                     ),
                   )

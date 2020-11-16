@@ -15,8 +15,11 @@ class Body extends StatelessWidget {
     return Container(
         //width: double.infinity,
         //height: size.height,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+
+        child: ListView(
+
+          //crossAxisAlignment: CrossAxisAlignment.center,
+
           children: [
             SizedBox(
               height: size.height * 0.03,
@@ -45,25 +48,89 @@ class Body extends StatelessWidget {
             ),
             Container(
               width: double.infinity,
-              height: size.height * 0.055,
-              decoration: BoxDecoration(color: Colors.blue),
-              alignment: Alignment.center,
-              child: Text(
-                'Bạn đang tìm công việc gì?',
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
+              height: size.height * 0.09,
+              decoration: BoxDecoration(gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xff12c2e9), Color(0xffc471ed), Color(0xfff64f59)]
+              )),
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.only(left: 15.0),
+              child: Row(
+                children: [
+                  Text(
+                    'Bạn đang tìm công việc gì?',
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+                ],
               ),
             ),
+            SizedBox(height: 20,),
+            Container(
+              padding: EdgeInsets.only(left: 15,),
+              child:
+              Text("Your Beans",
+                  style: TextStyle(fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  )
+              ),
+            ),
+            SizedBox(height: 5,),
+            Container(
+              padding: EdgeInsets.only(left: 40),
+              height: size.height * 0.2,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(0)),
+
+              color: Color(0xff01ff7c),
+              ),
+                child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                          Text(userLogin.amount.toString() + " Beans",
+                            style: TextStyle(fontSize: 28,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700),
+                          ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Image.asset("assets/images/pea.gif"),
+                      ],
+                    ),
+                  ],
+            )
+            ),
+            SizedBox(height: 20,),
+            Container(
+              padding: EdgeInsets.only(left: 15,),
+              child:
+              Text("What do you wanna do?",
+                  style: TextStyle(fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  )
+              ),
+            ),
+            SizedBox(height: 5,),
             Container(
               //width: double.infinity,
               height: size.height * 0.7,
+
               child: SingleChildScrollView(
-                child: Column(
+                child: Row(
+
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     PostingType(
-                      color: Color(0xFFE8E8E8),
+                      color: Color(0xffffffff),
                       icon: 'assets/images/content-css.gif',
                       title: 'Content Outsourcing',
                       press: () {
@@ -74,7 +141,7 @@ class Body extends StatelessWidget {
                       },
                     ),
                     PostingType(
-                      color: Color(0xFFE8E8E8),
+                      color: Color(0xffffffff),
                       icon: 'assets/images/digital-desgin.gif',
                       title: 'Design Outsourcing',
                       press: () {
@@ -85,7 +152,7 @@ class Body extends StatelessWidget {
                       },
                     ),
                     PostingType(
-                      color: Color(0xFFE8E8E8),
+                      color: Color(0xffffffff),
                       icon: 'assets/images/translate-icon.gif',
                       title: 'Translate Outsourcing',
                       press: () {
