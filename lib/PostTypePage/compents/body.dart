@@ -13,9 +13,10 @@ class Body extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-        width: double.infinity,
-        height: size.height,
+        //width: double.infinity,
+        //height: size.height,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
               height: size.height * 0.03,
@@ -56,14 +57,14 @@ class Body extends StatelessWidget {
               ),
             ),
             Container(
-              width: double.infinity,
+              //width: double.infinity,
               height: size.height * 0.7,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
                     PostingType(
                       color: Color(0xFFE8E8E8),
-                      icon: 'assets/images/thomaylanh.png',
+                      icon: 'assets/images/content-css.gif',
                       title: 'Content Outsourcing',
                       press: () {
                         Navigator.push(context,
@@ -74,7 +75,7 @@ class Body extends StatelessWidget {
                     ),
                     PostingType(
                       color: Color(0xFFE8E8E8),
-                      icon: 'assets/images/thodien.png',
+                      icon: 'assets/images/digital-desgin.gif',
                       title: 'Design Outsourcing',
                       press: () {
                         Navigator.push(context,
@@ -85,7 +86,7 @@ class Body extends StatelessWidget {
                     ),
                     PostingType(
                       color: Color(0xFFE8E8E8),
-                      icon: 'assets/images/thodien.png',
+                      icon: 'assets/images/translate-icon.gif',
                       title: 'Translate Outsourcing',
                       press: () {
                         Navigator.push(context,
