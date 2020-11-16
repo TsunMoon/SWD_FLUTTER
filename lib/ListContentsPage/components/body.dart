@@ -166,23 +166,44 @@ class _BodyState extends State<Body> {
             color: Colors.blue,
             alignment: Alignment.centerRight,
             padding: const EdgeInsets.only(top: 15),
-            child: ListTile(
-              leading: CircleAvatar(
-                backgroundImage: NetworkImage(
-                  widget.userLogin.photoUrl,
-                ),
-              ),
-              title: Text(
-                widget.userLogin.displayName,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              ),
-              subtitle: Text('Xin chào!'),
-              trailing: Icon(Icons.keyboard_arrow_right),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return InfoScreen(userLogin: widget.userLogin,);
-                }));
-              },
+            child: Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      child: IconButton(
+                        icon: Icon(Icons.arrow_back),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 7,
+                    child: Container(
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage: NetworkImage(
+                            widget.userLogin.photoUrl,
+                          ),
+                        ),
+                        title: Text(
+                          widget.userLogin.displayName,
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                        subtitle: Text('Xin chào!'),
+                        trailing: Icon(Icons.keyboard_arrow_right),
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) {
+                            return InfoScreen(userLogin: widget.userLogin,);
+                          }));
+                        },
+                      ),
+                    ),
+                  ),
+
+                ]
             ),
           ),
           Expanded(

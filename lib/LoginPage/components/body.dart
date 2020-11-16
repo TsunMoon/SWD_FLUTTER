@@ -58,7 +58,6 @@ Future<String> postLoginUser() async{
           children: [
             SizedBox(
               height: size.height * 0.03,
-
             ),
             Text(
               'CONTRADE',
