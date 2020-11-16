@@ -16,38 +16,44 @@ final GoogleSignIn googleSignInTest = GoogleSignIn();
 FirebaseUser user;
 
 UserLogin userLogin;
+String resultLogin = "Not Success";
+String messageError = "";
 
 
-class Body extends StatelessWidget {
 
-  const Body({
-    Key key,
-  }) : super(key: key);
+class Body extends StatefulWidget {
+  @override
+  _BodyState createState() => _BodyState();
+}
 
-Future<String> postLoginUser() async{
-  http.Response response = await http.post(
-    Uri.encodeFull(POST_LOGIN_USER),
-    headers: {"Content-type": "application/json"},
-    body: jsonEncode(<String, String>{
-      'username' : user.email,
-      'fullname' : user.displayName,
-      'avatar' : user.photoUrl
-    })
-  );
+class _BodyState extends State<Body> {
+  Future<String> postLoginUser() async{
+    http.Response response = await http.post(
+        Uri.encodeFull(POST_LOGIN_USER),
+        headers: {"Content-type": "application/json"},
+        body: jsonEncode(<String, String>{
+          'username' : user.email,
+          'fullname' : user.displayName,
+          'avatar' : user.photoUrl
+        })
+    );
+    print(response.statusCode);
 
-  if(response.statusCode == 200){
-  var data =  jsonDecode(utf8.decode(response.bodyBytes));
-  userLogin = new UserLogin(username: data["username"], displayName: data["fullname"], photoUrl: data["avatar"],
-    amount: data["amount"], rating: data["rating"]
-  );
-  print(userLogin.amount);
-  return "Success";
-  }else{
-  return "Not Success";
+    if(response.statusCode == 200){
+      var data =  jsonDecode(utf8.decode(response.bodyBytes));
+      userLogin = new UserLogin(username: data["username"], displayName: data["fullname"], photoUrl: data["avatar"],
+          amount: data["amount"], rating: data["rating"]
+      );
+      print(userLogin.amount);
+      resultLogin = "Success";
+    }else if(response.statusCode == 404){
+      resultLogin = "Banned";
+    }else{
+      resultLogin = "Not Success";
+    }
+    return "Not Success";
   }
 
-}
-  
 
   @override
   Widget build(BuildContext context) {
@@ -79,20 +85,38 @@ Future<String> postLoginUser() async{
             RoundedButton(
               text: 'Đăng nhập bằng Email',
               press: () async {
-              await  signInWithGoogleTest();
-              await postLoginUser();
+                await  signInWithGoogleTest();
+                await postLoginUser();
+                if(resultLogin.compareTo("Success") == 0){
 
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return MainScreen(userLogin: userLogin == null ? new UserLogin(username: user.email,
-                  displayName: user.displayName,
-                  photoUrl: user.photoUrl
-                  ) : userLogin );
-                }));
+                  setState(() {
+                    messageError = "";
+                  });
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return MainScreen(userLogin: userLogin == null ? new UserLogin(username: user.email,
+                        displayName: user.displayName,
+                        photoUrl: user.photoUrl
+                    ) : userLogin );
+                  }));
+                }
+                if(resultLogin.compareTo("Banned") == 0){
+                  setState(() {
+                    messageError = "Tài khoản của bạn đã bị BANNED";
+                  });
+                }else if(resultLogin.compareTo("Not Success") == 0){
+                  setState(() {
+                    messageError = "Tài khoản của bạn bị lỗi khi xác minh";
+                  });
+                }
+
               },
               color: kPrimaryColor,
             ),
             SizedBox(
               height: size.height * 0.04,
+              child: Text(
+                messageError == "" ? "" : messageError
+                ,),
             ),
 
           ],
@@ -101,8 +125,8 @@ Future<String> postLoginUser() async{
     );
   }
 
- 
 }
+
 
 Future<String> signInWithGoogleTest() async{
   final GoogleSignInAccount googleSignInAccountTest = await googleSignInTest.signIn();
@@ -113,7 +137,7 @@ Future<String> signInWithGoogleTest() async{
       accessToken: googleSignInAuthenticationTest.accessToken);
 
   AuthResult authResult = await _authTest.signInWithCredential(credentialTest);
-   user = await _authTest.currentUser(); 
+  user = await _authTest.currentUser();
   return null;
 }
 
