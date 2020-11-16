@@ -35,19 +35,21 @@ class PostingType extends StatelessWidget {
                   ),
                   Container(
                       height: size.height * 0.13,
-                      alignment: Alignment.center,
+                      width: size.width * 0.25,
                       child: Image.asset(
                         icon,
-                        width: size.width * 0.22,
                       )),
-                  Container(
-                    height: size.height * 0.08,
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-                    alignment: Alignment.topCenter,
-                    child: Text(
-                      title,
-                      style: TextStyle(color: Colors.black, fontSize: 15),
-                      textAlign: TextAlign.center,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Container(
+                      height: size.height * 0.08,
+                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+                      alignment: Alignment.topCenter,
+                      child: Text(
+                        title,
+                        style: TextStyle(color: Colors.black, fontSize: 15),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   )
                 ],

@@ -16,93 +16,103 @@ final GoogleSignIn googleSignInTest = GoogleSignIn();
 FirebaseUser user;
 
 UserLogin userLogin;
+String resultLogin ;
 
+ class Body extends StatefulWidget {
+   @override
+   _BodyState createState() => _BodyState();
+ }
 
-class Body extends StatelessWidget {
+ class _BodyState extends State<Body> {
+   String message = null;
+   Future<String> postLoginUser() async{
+     http.Response response = await http.post(
+         Uri.encodeFull(POST_LOGIN_USER),
+         headers: {"Content-type": "application/json"},
+         body: jsonEncode(<String, String>{
+           'username' : user.email,
+           'fullname' : user.displayName,
+           'avatar' : user.photoUrl
+         })
+     );
 
-  const Body({
-    Key key,
-  }) : super(key: key);
+     print(response.statusCode);
+     if(response.statusCode == 200){
+       var data =  jsonDecode(utf8.decode(response.bodyBytes));
+       userLogin = new UserLogin(username: data["username"], displayName: data["fullname"], photoUrl: data["avatar"],
+           amount: data["amount"], rating: data["rating"]
+       );
+       print(userLogin.amount);
+       resultLogin =  "Success";
 
-Future<String> postLoginUser() async{
-  http.Response response = await http.post(
-    Uri.encodeFull(POST_LOGIN_USER),
-    headers: {"Content-type": "application/json"},
-    body: jsonEncode(<String, String>{
-      'username' : user.email,
-      'fullname' : user.displayName,
-      'avatar' : user.photoUrl
-    })
-  );
+     }else
+     if(response.statusCode == 404){
+       resultLogin = "Banned";
+     }else{
+       resultLogin = "Not Success";
+     }
 
-  if(response.statusCode == 200){
-  var data =  jsonDecode(utf8.decode(response.bodyBytes));
-  userLogin = new UserLogin(username: data["username"], displayName: data["fullname"], photoUrl: data["avatar"],
-    amount: data["amount"], rating: data["rating"]
-  );
-  print(userLogin.amount);
-  return "Success";
-  }else{
-  return "Not Success";
-  }
+     print(resultLogin);
+   }
+   @override
+   Widget build(BuildContext context) {
+     Size size = MediaQuery.of(context).size;
+     return Background(
+       child: SingleChildScrollView(
+         child: Column(
+           children: [
+             SizedBox(
+               height: size.height * 0.03,
+             ),
+             Text(
+               'CONTRADE',
+               style: TextStyle(
+                   fontWeight: FontWeight.bold,
+                   fontSize: 48,
+                   color: Colors.black),
+             ),
+             SizedBox(
+               height: size.height * 0.03,
+             ),
+             Image.asset(
+               "assets/images/login-anim.gif",
+               height: size.height * 0.35,
+             ),
+             SizedBox(
+               height: size.height * 0.03,
+             ),
+             RoundedButton(
+               text: 'Đăng nhập bằng Email',
+               press: () async {
+                 await  signInWithGoogleTest();
+                 if(resultLogin.compareTo("Banned") == 0){
+                   message = "Your account is banned. Please contact admin";
+                 }else{
+                   message = "";
+                   Navigator.push(context, MaterialPageRoute(builder: (context) {
+                     return MainScreen(userLogin: userLogin == null ? new UserLogin(username: user.email,
+                         displayName: user.displayName,
+                         photoUrl: user.photoUrl
+                     ) : userLogin );
+                   }));
+                 }
+               },
+               color: kPrimaryColor,
+             ),
+             SizedBox(
+               height: size.height * 0.04,
+               child: Container(
+                 child: message != null ? Text(message): Text(""),
+               ),
+             ),
 
-}
-  
+           ],
+         ),
+       ),
+     );
+   }
 
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Background(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: size.height * 0.03,
-            ),
-            Text(
-              'CONTRADE',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 48,
-                  color: Colors.black),
-            ),
-            SizedBox(
-              height: size.height * 0.03,
-            ),
-            Image.asset(
-              "assets/images/login-anim.gif",
-              height: size.height * 0.35,
-            ),
-            SizedBox(
-              height: size.height * 0.03,
-            ),
-            RoundedButton(
-              text: 'Đăng nhập bằng Email',
-              press: () async {
-              await  signInWithGoogleTest();
-              await postLoginUser();
-
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return MainScreen(userLogin: userLogin == null ? new UserLogin(username: user.email,
-                  displayName: user.displayName,
-                  photoUrl: user.photoUrl
-                  ) : userLogin );
-                }));
-              },
-              color: kPrimaryColor,
-            ),
-            SizedBox(
-              height: size.height * 0.04,
-            ),
-
-          ],
-        ),
-      ),
-    );
-  }
-
- 
-}
+ }
 
 Future<String> signInWithGoogleTest() async{
   final GoogleSignInAccount googleSignInAccountTest = await googleSignInTest.signIn();
