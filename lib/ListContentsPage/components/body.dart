@@ -23,7 +23,7 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-
+  int flagColorChange = 1;
 
   final List<String> entries = <String>['A', 'B', 'C'];
   final List<int> colorCodes = <int>[600, 500, 100];
@@ -231,12 +231,13 @@ class _BodyState extends State<Body> {
                                     onPressed: () {
                                       setState(() {
                                         listTotal = _fetchPostWriter();
+                                        flagColorChange = 1;
                                       });
                                     widget.isRequested = false;
                                       widget.strButton = "Request";
                                     },
                                     child: Text('All'),
-                                    color: Colors.orange,
+                                    color: flagColorChange == 1 ? Colors.redAccent : Colors.blueAccent,
                                   ),
                                 ),
                               ),
@@ -249,12 +250,13 @@ class _BodyState extends State<Body> {
                                     
                                       setState(()  {
                                         listTotal = _getRequetedByUsername("Requested");
+                                        flagColorChange = 2;
                                       });
                                       widget.isRequested = true;
                                       widget.strButton = "Cancel Request";
                                     },
                                     child: Text('Requested'),
-                                    color: Colors.orange,
+                                    color: flagColorChange == 2 ? Colors.redAccent : Colors.blueAccent,
                                   ),
                                 ),
                               ),
@@ -266,12 +268,13 @@ class _BodyState extends State<Body> {
                                     onPressed: () {
                                       setState(() {
                                         listTotal = _getRequetedByUsername("Accepted");
+                                        flagColorChange = 3;
                                       });
                                       widget.isRequested = false;
                                       widget.strButton = "Accepted";
                                     },
                                     child: Text('Accepted'),
-                                    color: Colors.orange,
+                                    color: flagColorChange == 3 ? Colors.redAccent : Colors.blueAccent,
                                   ),
                                 ),
                               )
