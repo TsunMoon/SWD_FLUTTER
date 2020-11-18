@@ -108,8 +108,8 @@ class Body extends StatelessWidget {
                           Expanded(
                               child: Container(
                                 child: Text(
-                                  currentBean != null ? currentBean :
-                                  userLogin.amount.toString() + " Bean",
+                                  currentBean != null ? currentBean + " Beans" :
+                                  userLogin.amount.toString() + " Beans",
                                   style: TextStyle(fontSize: 22, color: Colors.white),
                                 ),
                               ))
