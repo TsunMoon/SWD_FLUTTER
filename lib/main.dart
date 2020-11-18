@@ -19,7 +19,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(fontFamily: 'Roboto'),
+      theme: ThemeData(fontFamily: 'Roboto',
+      primarySwatch: Colors.cyan,
+      ),
       home: LoginScreen(),
     );
   }
