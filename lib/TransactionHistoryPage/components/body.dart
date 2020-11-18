@@ -13,9 +13,28 @@ class Body extends StatelessWidget {
   final List<int> colorCodes = <int>[600, 500, 100];
 
   UserLogin userLogin;
+  var currentBean;
 
   Body({Key key, this.userLogin}): super(key: key);
 
+  // Lấy số đậu hiên tại theo username
+  Future<int> _getCurrentBean() async {
+    http.Response response = await http.post(
+      Uri.encodeFull(GET_CURRENT_BEAN_BY_USERNAME),
+        headers: {"Content-type": "application/json"},
+        body: jsonEncode(<String, String>{
+          'username' : userLogin.username
+        })
+    );
+    var jsonDataBean = json.decode(utf8.decode(response.bodyBytes));
+    print(jsonDataBean);
+    currentBean = jsonDataBean.toString();
+
+    return -1;
+  }
+
+
+  //Lấy danh sách lịch sử giao dịch
   Future<List<TransactionHistory>> _fetchTransactionHistory() async {
     http.Response response = await http.post(
       Uri.encodeFull(GET_TRANSACTION_HISTORY_BY_USERNAME),
@@ -24,6 +43,7 @@ class Body extends StatelessWidget {
           'username' : userLogin.username
       })
     );
+
 
     var jsonData = json.decode(utf8.decode(response.bodyBytes));
     List<TransactionHistory> listTransaction = [];
@@ -36,7 +56,7 @@ class Body extends StatelessWidget {
       );
       listTransaction.add(newTransaction);
     }
-
+   await _getCurrentBean();
     return listTransaction;
   }
 
@@ -88,6 +108,7 @@ class Body extends StatelessWidget {
                           Expanded(
                               child: Container(
                                 child: Text(
+                                  currentBean != null ? currentBean :
                                   userLogin.amount.toString() + " Bean",
                                   style: TextStyle(fontSize: 22, color: Colors.white),
                                 ),

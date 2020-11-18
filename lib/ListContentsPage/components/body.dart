@@ -4,6 +4,7 @@ import 'package:mobileapp/Models/user_login.dart';
 import 'package:mobileapp/Models/writer_post.dart';
 import 'package:mobileapp/PostDetailPage/postdetail_screen.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobileapp/PostTypePage/posttype_screen.dart';
 import 'package:mobileapp/global.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -174,7 +175,9 @@ class _BodyState extends State<Body> {
                       child: IconButton(
                         icon: Icon(Icons.arrow_back),
                         onPressed: () {
-                          Navigator.pop(context);
+                          Navigator.push(context, MaterialPageRoute(builder: (context){
+                            return PostTypeScreen(userLogin: widget.userLogin,);
+                          }));
                         },
                       ),
                     ),

@@ -16,3 +16,5 @@ const DELETE_REUESTED_POST = API + "/api/UsersHavingPosts/removeRequestedPost";
 const GET_TRANSACTION_HISTORY_BY_USERNAME = API + "/api/TransactionHistories/getTransactions";
 
 const PRESS_SUBMIT = API + "/api/TransactionHistories/transaction";
+
+const GET_CURRENT_BEAN_BY_USERNAME = API +"/api/users/userBeans";

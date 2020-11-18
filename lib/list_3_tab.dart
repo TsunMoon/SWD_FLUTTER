@@ -5,6 +5,7 @@ import 'package:mobileapp/Models/user_login.dart';
 import 'package:mobileapp/Models/writer_post.dart';
 import 'package:mobileapp/PostDetailPage/postdetail_screen.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobileapp/PostTypePage/posttype_screen.dart';
 import 'package:mobileapp/global.dart';
 
 class List3Tab extends StatefulWidget {
@@ -33,11 +34,11 @@ class _List3TabState extends State<List3Tab> {
   void pressSubmit(int postID){
     showDialog(
         context: context,
-        builder: (_) => AlertDialog( title: Text('KHÔNG THỂ REQUEST', style: TextStyle(color: Colors.red, fontSize: 25),),
+        builder: (_) => AlertDialog( title: Text('Submit', style: TextStyle(color: Colors.red, fontSize: 25),),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('Bạn đang thực hiện một bài POST khác rồi', style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                Text('Submit Thành Công', style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
 
               ],
             ),
@@ -54,6 +55,10 @@ class _List3TabState extends State<List3Tab> {
                       'receiver' : widget.userLogin.username ,
                     })
                 );
+
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return PostTypeScreen(userLogin: widget.userLogin,);
+                }));
               },
             ),
           ],
